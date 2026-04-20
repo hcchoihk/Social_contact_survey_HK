@@ -1,6 +1,33 @@
 library(grid)
 
 
+# apply reciprocity adjustment, using the overall population age distribution
+fun_make_cntmat_recip = function(cnt_mat_in, agedist){
+	# cnt_mat_in: the direct output from socialmixr::contact_matrix()
+	# agedist: age distribution of the study population 
+	# from socialmixr::contact_matrix(), cij, row i = age group of participants, col j = age group of contacts
+	# reciprocity: total num of contacts from age group i = total num of contacts from age group j
+	# i.e., c1_ij = (cij * Ni + cji * Nj)/2Ni, such that c1_ij * Ni = c1_ji * Nj; here, c_ij and c1_ij refer to the notations of i and j from socialmixr::contact_matrix()
+	nrow_cntmat = nrow(cnt_mat_in)
+	ncol_cntmat = ncol(cnt_mat_in)
+	cnt_mat_new = matrix(NA, nrow = nrow_cntmat, ncol = ncol_cntmat, dimnames=dimnames(cnt_mat_in))
+	cnt_mat_in[is.na(cnt_mat_in)] = 0
+	
+	for (jj in 1:ncol_cntmat){
+		for (ii in 1:nrow_cntmat){
+			if (ii==jj){
+				cnt_mat_new[ii, jj] = cnt_mat_in[ii,jj];
+			} else {
+				cnt_mat_new[ii, jj] = (cnt_mat_in[ii,jj] * agedist[ii] + cnt_mat_in[jj,ii] * agedist[jj])/(2*agedist[ii])
+			}
+		} # for- ii
+	} # for- jj
+	
+	return (cnt_mat_new)
+} # fun_make_cntmat_recip 
+
+
+
 colour_blue =  function(contactmatrix,max.value){
   colours_vec = c("white","steelblue", "navy")
   colours = colorRampPalette(colours_vec,bias=2.0)

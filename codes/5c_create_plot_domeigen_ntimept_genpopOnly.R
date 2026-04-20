@@ -41,15 +41,20 @@ iplot_xtime = sapply(xtime_datepairs, mean)
 
 
 # contact matrices
-num_phycnt = 2;
+num_phycnt = 3;
+iplot_vec = 1:num_phycnt
 
-names_phycnt = c("all", "phycnt")
-labels_phycnt = c('Overall', 'Physical')
+names_phycnt = c("all", "phycnt", "nonphycnt")
+labels_phycnt = c('Overall', 'Physical', 'Non-physical')
 
 
 # based on the original data set
 cntmat_phy_array_genpop = array(list(NULL), dim=c(num_phycnt, num_time));
+dimnames(cntmat_phy_array_genpop) = list(names_phycnt, NULL);
 max_eigenval_cntmat_array_genpop = array(NA, dim=c(num_phycnt, num_time)); # for all and phy/nonphy contacts 
+
+cntmat_phy_array_genpop_norecip = cntmat_phy_array_genpop;
+
 
 # socialmixr for overall
 chk_socialmixr_byphase = rep(list(NULL), length=num_date_byphase)
@@ -65,9 +70,14 @@ for (iphase in 1:num_date_byphase){
 for (itime in 1:num_time){
 
 	TT_socialmixr = chk_socialmixr_byphase[[itime]]
+	cntmat_phy_array_genpop_norecip[['all', itime]] = contact_matrix(survey = TT_socialmixr, age.limits = age_limits_agegps, symmetric=sym_cntmatrix_YN);
+	cntmat_phy_array_genpop_norecip[['phycnt', itime]] = contact_matrix(survey = TT_socialmixr, age.limits = age_limits_agegps, symmetric=sym_cntmatrix_YN, filter = list(phys_contact = 1));
+	cntmat_phy_array_genpop_norecip[['nonphycnt', itime]] = contact_matrix(survey = TT_socialmixr, age.limits = age_limits_agegps, symmetric=sym_cntmatrix_YN, filter = list(phys_contact = 2));
+
+	# apply reciprocity
 	for (iphycnt in 1:num_phycnt){
-		cntmat_phy_array_genpop[[1, itime]] = contact_matrix(survey = TT_socialmixr, age.limits = age_limits_agegps, symmetric=sym_cntmatrix_YN);
-		cntmat_phy_array_genpop[[2, itime]] = contact_matrix(survey = TT_socialmixr, age.limits = age_limits_agegps, symmetric=sym_cntmatrix_YN, filter = list(phys_contact = 1));
+		cntmat_phy_array_genpop[[iphycnt, itime]] = cntmat_phy_array_genpop_norecip[[iphycnt, itime]]
+	    cntmat_phy_array_genpop[[iphycnt, itime]]$matrix = fun_make_cntmat_recip(cntmat_phy_array_genpop_norecip[[iphycnt, itime]]$matrix, pop_agedist_overall_use$pop_agedist)
 	} # for- iphycnt
 
 } # for- itime
@@ -127,7 +137,7 @@ fun_plot_cnt_timeline_blank(YMAX = YMAX, YLAB = YLAB, yaxis_at = yaxis_at)
 grid.lines(x = 0.5+c(0,28),y = c(1,1), default.units = 'native',gp = gpar(col = "black", lwd = 0.75, lty=3)) 
 
 
-for (iplot in 1:2){
+for (iplot in iplot_vec){
 	COLS_iplot = COLS_pick[iplot]
 	PCHS_iplot = PCHS_pick[iplot]
 

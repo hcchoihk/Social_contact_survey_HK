@@ -64,12 +64,26 @@ boot_TT_d17 = future_sapply(1:num_boot, simplify=FALSE, function(iboot) {
 	  work = contact_matrix(survey = d17_socialmixr, age.limits = age_limits_agegps, symmetric=sym_cntmatrix_YN, filter = list(cnt_work = 1)),
 	  others = contact_matrix(survey = d17_socialmixr, age.limits = age_limits_agegps, symmetric=sym_cntmatrix_YN, filter = list(cnt_others = 1))
 	)
-
+	
 	m_d17_list_phycnt = list(
 		all = m_d17_list_loc$all,
 		phys_cnt = contact_matrix(survey = d17_socialmixr, age.limits = age_limits_agegps, symmetric=sym_cntmatrix_YN, filter = list(phys_contact = 1)),
 		nonphys_cnt = contact_matrix(survey = d17_socialmixr, age.limits = age_limits_agegps, symmetric=sym_cntmatrix_YN, filter = list(phys_contact = 2))
 	)
+
+
+	# apply reciprocity
+	m_d17_list_loc = lapply(m_d17_list_loc, function(xx_cnt_mat) {
+		cnt_mat_TT = xx_cnt_mat
+		cnt_mat_TT$matrix = fun_make_cntmat_recip(xx_cnt_mat$matrix, pop_agedist_overall_use$pop_agedist)
+		return(cnt_mat_TT)
+	})
+	m_d17_list_phycnt = lapply(m_d17_list_phycnt, function(xx_cnt_mat) {
+		cnt_mat_TT = xx_cnt_mat
+		cnt_mat_TT$matrix = fun_make_cntmat_recip(xx_cnt_mat$matrix, pop_agedist_overall_use$pop_agedist)
+		return(cnt_mat_TT)
+	})
+	
 
 	# eigenvalues 
 	d17_eigen_out_matrix = matrix(NA, nrow=1, ncol=3)
@@ -128,6 +142,19 @@ boot_TT_chk = future_sapply(1:num_boot, simplify=FALSE, function(iboot) {
 		  , phys_contact = contact_matrix(survey = chk_socialmixr_TT, age.limits = age_limits_agegps, symmetric=sym_cntmatrix_YN, filter = list(phys_contact = 1))
 		  , nonphys_contact = contact_matrix(survey = chk_socialmixr_TT, age.limits = age_limits_agegps, symmetric=sym_cntmatrix_YN, filter = list(phys_contact = 2))
 		  )
+		  
+		# apply reciprocity
+		m_chk_list_loc_byphase[[iphase]] = lapply(m_chk_list_loc_byphase[[iphase]], function(xx_cnt_mat) {
+			cnt_mat_TT = xx_cnt_mat
+			cnt_mat_TT$matrix = fun_make_cntmat_recip(xx_cnt_mat$matrix, pop_agedist_overall_use$pop_agedist)
+			return(cnt_mat_TT)
+		})
+		m_chk_list_phycnt_byphase[[iphase]] = lapply(m_chk_list_phycnt_byphase[[iphase]], function(xx_cnt_mat) {
+			cnt_mat_TT = xx_cnt_mat
+			cnt_mat_TT$matrix = fun_make_cntmat_recip(xx_cnt_mat$matrix, pop_agedist_overall_use$pop_agedist)
+			return(cnt_mat_TT)
+		})
+		  
 		
 	} # for- iphase
 

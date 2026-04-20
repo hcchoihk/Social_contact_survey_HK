@@ -124,7 +124,7 @@ for (iplottype in 1:2){
 				fun_plotcontact(nrow=num_agegps, ncol=num_agegps, cols=fun_colour_pick(m_plot, max.value = max_cnt_colbar), group = '', a=5, INDEX = xletter, TITLE = '')
 				if (irow==nrow_plot){ # x-axis label
 					# browser()
-					grid.text('Age of participant', x=xvalues_xaxis_label, y=yvalues_xaxis_label,gp=gpar(fontsize=7))
+					grid.text('Age of participant', x=xvalues_xaxis_label, y=yvalues_xaxis_label, gp=gpar(fontsize=7))
 				}
 				popViewport()
 				
