@@ -25,7 +25,7 @@ update_outputdate = function(shortDate=TRUE) {
 # working folder that holds the codes and data
 # ** change to the setting w.r.t. your computer
 # set the working folder
-folder_main = "C:/Users/Horace Choi/D24H Dropbox/H Choi/Sync/Others/_CoMix_Temp/Rcodes_share/" # <- change this
+folder_main = "C:/Users/Horace Choi/Dropbox/Sync/Others/_CoMix_Temp/Rcodes_share_260417_rerun_2/" # <- change this
 cat( sprintf("folder_main =\n%s\n", folder_main) )
 cat( "Check if this is correct. Enter _c_ to continue, or _Q_ to quit and edit.\n" )
 browser()
@@ -131,15 +131,17 @@ print( Sys.time() - time00 )
 
 # 6. resample 
 # whether to run bootstrapping replications. This could take several hours. If not running bootstrapping, one can prepare the plots using the outputs of the bootstrapping in " folder_main"
-run_boot_YN = FALSE; 
+run_boot_YN = TRUE; 
 if (run_boot_YN){
 	source( "codes/6a_create_contact_matrices_resample_boot_parallel.R" ) # include high-contact group to construct the contact matrices
 }
 source( "codes/6b_plot_contact_matrices_resample_boot.R" )
 if (run_boot_YN){
-	source( "codes/6c_create_domeigen_boot_parallel_ntimept_genpop.R ") # assess the uncertainty of the dominant eigenvalues of the contact matrices among the general pouplation
+	source( "codes/6c_create_domeigen_boot_parallel_ntimept_genpop_nonphy.R ") # assess the uncertainty of the dominant eigenvalues of the contact matrices among the general pouplation
+	source( "codes/6c_create_domeigen_boot_parallel_ntimept_genpop_nonphy_cntdur_abv15min.R" )
 }
-source( "codes/6d_plot_domeigenval_boot_ntimept_genpop.R" ) 
+source( "codes/6d_plot_domeigenval_boot_ntimept_genpop_nonphy.R" ) 
+source( "codes/6d_plot_domeigenval_boot_ntimept_genpop_nonphy_cntdur_abv15min.R" )
 
 print( 'completed 6' )
 print( Sys.time() - time00 )

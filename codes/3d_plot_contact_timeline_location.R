@@ -1,7 +1,7 @@
 # plot number of contacts by location
 
 numGAM_gps = 4
-labels_GAM_gps = c('Home', 'School', 'Work', 'Others')
+labels_GAM_gps = c('Home', 'School', 'Work', 'Other places')
 pchs_GAM_gps = c(16, 15, 18, 17)
 cols_GAM_gps = c("black", "coral", COLS[6], "darkred")
 

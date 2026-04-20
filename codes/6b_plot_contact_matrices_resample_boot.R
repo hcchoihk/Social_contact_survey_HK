@@ -23,6 +23,8 @@ fname_RData_cntmat_boot = "cntmat_4phases_nboot1000_resample.RData";
 
 num_phases = 4
 date_byphase = as.Date(c("2021-09-01", "2022-01-07", "2022-04-21", "2023-03-01", "2024-01-01"))
+labels_date_byphase = as.Date(c("2021-09-17", "2022-01-07", "2022-04-21", "2023-03-01", "2024-01-01"))
+
 
 # settings
 max_count_cntmat_cell = 40; # max number of contact in each cell (age i x age j) in a contact matrix
@@ -30,6 +32,7 @@ max_count_cntmat_cell = 40; # max number of contact in each cell (age i x age j)
 names_loc = c('all', 'Home', 'School', 'Work', 'Others');
 names_phycnt = c("all", "phycnt", "nonphycnt")
 labels_loc = c("Overall", names_loc[-1])
+labels_loc[labels_loc=="Others"] = "Other places"
 labels_phycnt = c('Overall', 'Physical', 'Non-physical')
 names_time = c("before5", "during5", "after5_p1", "after5_p2", "survey_1516")
 labels_time = c("Pre-fifth wave", "Fifth wave", "Post-fifth wave", "Post-pandemic", "2015-2016 survey")
@@ -39,7 +42,7 @@ num_time = 5
 # add date for labels_time
 if (TRUE){
 	for(itime in 1:4){
-		labels_time[itime] = paste(sep="\n", labels_time[itime], sprintf("%s to %s", date_byphase[itime], date_byphase[itime+1]-1))
+		labels_time[itime] = paste(sep="\n", labels_time[itime], sprintf("%s to %s", labels_date_byphase[itime], labels_date_byphase[itime+1]-1))
 	} # for- itime
 }
 
