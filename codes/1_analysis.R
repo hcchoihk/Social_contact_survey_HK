@@ -124,7 +124,7 @@ chk_contact_base$part_age_16gps = chk_contact_base$part_age
 chk_contact_base$part_age_16gps[chk_contact_base$part_age_16gps>16] = 16
 
 
-labels_loc = c("Home", "School", "Work", "Others")
+labels_loc = c("Home", "School", "Work", "Other places")
 COLS = rev(ggpubr::get_palette(palette = "YlGn", length(labels_loc)))
 
 # plot 
@@ -210,7 +210,7 @@ if (plot_pdf_YN){ dev.off()}
 labels_dur = c('<5 mins', '5-14 mins', '15-59 mins', '1-4 hrs', '>4 hrs')
 labels_freq = c('Daily or almost daily', 'Once or twice a week', 'Once or twice a month', 'Less than once a month', 'Never met before')
 labels_freq = c('Daily\n', 'Weekly\n', 'Monthly\n', 'Less than\na month', 'First time\n')
-labels_loc = c("Home", "School", "Work", "Others")
+labels_loc = c("Home", "School", "Work", "Other places")
 
 num_dur_catg = 5;
 num_freq_catg = 5;

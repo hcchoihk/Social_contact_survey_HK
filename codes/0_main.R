@@ -25,7 +25,7 @@ update_outputdate = function(shortDate=TRUE) {
 # working folder that holds the codes and data
 # ** change to the setting w.r.t. your computer
 # set the working folder
-folder_main = "C:/Users/Horace Choi/Dropbox/Sync/Others/_CoMix_Temp/Rcodes_share_260417_rerun_2/" # <- change this
+folder_main = "C:/Users/Horace Choi/Dropbox/Sync/Others/_CoMix_Temp/Rcodes_share_new_260424/" # <- change this
 cat( sprintf("folder_main =\n%s\n", folder_main) )
 cat( "Check if this is correct. Enter _c_ to continue, or _Q_ to quit and edit.\n" )
 browser()
@@ -51,6 +51,7 @@ time00 = Sys.time()
 # 1. data analysis
 source( "codes/1_tables_mean contacts_5wave_4phases.R" )
 source( "codes/1_analysis.R" )
+source( "codes/1_plot_cntdur_cntloc.R")
 source( "codes/1_plot_cnt_duration_dist.R")
 
 # 2/3. settings for timeline plots
@@ -124,24 +125,28 @@ num_agegps = 16;
 source( "codes/5_plot_functions_cntmat.R" )
 source( "codes/5a_create_contact_matrices_genpopOnly.R" )
 source( "codes/5b_plot_contact_matrices_genpopOnly.R" )
-source( "codes/5c_create_plot_domeigen_ntimept_genpopOnly.R" )
 
 print( 'completed 5' )
 print( Sys.time() - time00 )
 
-# 6. resample 
 # whether to run bootstrapping replications. This could take several hours. If not running bootstrapping, one can prepare the plots using the outputs of the bootstrapping in " folder_main"
 run_boot_YN = TRUE; 
 if (run_boot_YN){
-	source( "codes/6a_create_contact_matrices_resample_boot_parallel.R" ) # include high-contact group to construct the contact matrices
+	source( "codes/6a_create_domeigen_boot_parallel_ntimept_genpop_nonphy.R ") # assess the uncertainty of the dominant eigenvalues of the contact matrices among the general pouplation
+	source( "codes/6a_create_domeigen_boot_parallel_ntimept_genpop_nonphy_cntdur_abv15min.R" )
 }
-source( "codes/6b_plot_contact_matrices_resample_boot.R" )
-if (run_boot_YN){
-	source( "codes/6c_create_domeigen_boot_parallel_ntimept_genpop_nonphy.R ") # assess the uncertainty of the dominant eigenvalues of the contact matrices among the general pouplation
-	source( "codes/6c_create_domeigen_boot_parallel_ntimept_genpop_nonphy_cntdur_abv15min.R" )
-}
-source( "codes/6d_plot_domeigenval_boot_ntimept_genpop_nonphy.R" ) 
-source( "codes/6d_plot_domeigenval_boot_ntimept_genpop_nonphy_cntdur_abv15min.R" )
+source( "codes/6b_plot_domeigenval_boot_ntimept_genpop_nonphy.R" ) 
+source( "codes/6b_plot_domeigenval_boot_ntimept_genpop_nonphy_cntdur_abv15min.R" )
+print( 'completed 6, bootstrapping for changes in eigenvalues' )
+print( Sys.time() - time00 )
 
-print( 'completed 6' )
+
+# 7. resample for overall population
+run_boot_YN = TRUE; 
+if (run_boot_YN){
+	source( "codes/7a_create_contact_matrices_resample_boot_parallel.R" ) # include high-contact group to construct the contact matrices
+}
+source( "codes/7b_plot_contact_matrices_resample_boot.R" )
+
+print( 'completed 7, bootstrapping for contact matrices for the overall population' )
 print( Sys.time() - time00 )

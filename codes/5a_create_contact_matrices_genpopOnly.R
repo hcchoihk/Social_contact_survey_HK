@@ -66,7 +66,7 @@ cntmat_phy_array_genpop_norecip = cntmat_phy_array_genpop;
 d17_socialmixr_0 <- survey(participants = d17_part, contacts = d17_contact)
 chk_socialmixr_byphase = rep(list(NULL), length=num_date_byphase)
 for (iphase in 1:num_date_byphase){
-	irow_TT = (chk_part_base$date >= date_byphase[iphase] & chk_part_base$date < date_byphase[iphase+1] & chk_part_base$part_specialgroups %in% 997 ); # among participants not in the special groups 
+	irow_TT = (chk_part_base$date >= date_byphase[iphase] & chk_part_base$date < date_byphase[iphase+1] & chk_part_base$part_specialgroups_YN==0 ); # among participants not in the special groups 
 	chk_part_TT = chk_part_base[irow_TT,];
 	chk_contact_TT = chk_contact_base[chk_contact_base$part_id %in% chk_part_TT$part_id,]
 	chk_socialmixr_byphase[[iphase]] <- survey(participants = chk_part_TT, contacts = chk_contact_TT)
